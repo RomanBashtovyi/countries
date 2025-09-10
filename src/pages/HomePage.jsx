@@ -5,19 +5,19 @@ import { useEffect } from 'react'
 import { List } from '../components/List'
 import { Card } from '../components/Card'
 import { Controls } from '../components/Controls'
+import { NoResults } from '../components/NoResults'
 import { selectVisibleCountries } from '../store/countries/countries-selectors'
 import { selectCountriesInfo } from '../store/countries/countries-selectors'
 import { loadCountries } from '../store/countries/countries-actions'
-import { selectSearch } from '../store/controls/controls-selectors'
+import { selectControls } from '../store/controls/controls-selectors'
 
 export const HomePage = () => {
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
-  const search = useSelector(selectSearch)
-  const countries = useSelector((state) => selectVisibleCountries(state, { search }))
+  const { search, region } = useSelector(selectControls)
+  const countries = useSelector((state) => selectVisibleCountries(state, { search, region }))
   const { status, error, qty } = useSelector(selectCountriesInfo)
-
 
   useEffect(() => {
     if (!qty) {
@@ -31,7 +31,7 @@ export const HomePage = () => {
 
       {error && <h2>Can't fetch data</h2>}
       {status === 'loading' && <h2>Loading...</h2>}
-      {status === 'received' && (
+      {status === 'received' && countries.length > 0 && (
         <List>
           {countries.map((c) => {
             const countryInfo = {
@@ -57,6 +57,7 @@ export const HomePage = () => {
           })}
         </List>
       )}
+      {status === 'received' && countries.length === 0 && <NoResults search={search} region={region} />}
     </>
   )
 }
