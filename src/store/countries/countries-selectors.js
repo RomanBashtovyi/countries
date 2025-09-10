@@ -3,6 +3,4 @@ export const selectCountriesInfo = (state) => ({
   error: state.countries.error,
   qty: state.countries.list.length,
 })
-export const selectAllCountries = (state) => ({
-  status: state.countries.list,
-})
+export const selectAllCountries = (state) => state.countries.list

@@ -17,12 +17,13 @@ export const setError = (error) => ({
   payload: error,
 })
 
-export const loadCountries = (dispatch, _, { client, api }) => {
-  dispatch(setLoading())
+export const loadCountries =
+  () =>
+  (dispatch, _, { client, api }) => {
+    dispatch(setLoading())
 
-  client
-    .get(api.ALL_COUNTRIES)
-    .then(({ data }) => dispatch(setCountries(data)))
-    .catch((err) => dispatch(setError(err.message)))
-    .finally(() => dispatch(setLoading(false)))
-}
+    client
+      .get(api.ALL_COUNTRIES)
+      .then(({ data }) => dispatch(setCountries(data)))
+      .catch((err) => dispatch(setError(err.message)))
+  }
